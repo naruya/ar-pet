@@ -47,8 +47,20 @@ class AE(nn.Module):
         yaw = [2 * np.pi * y / 64 for y in range(64)]
         yaw = [[np.cos(y), np.sin(y)] for y in yaw]
         yaw = torch.from_numpy(np.array(yaw).astype(np.float32)).to(self.device)
-        _img = self.decoder(yaw, bak[:64])
+        _img = self.decoder(yaw, bak[:1].expand(64, -1, -1, -1))
         return _img
+
+    def sample_vid(self, feed_dict):
+        bak = feed_dict["bak"].to(self.device)
+        vid = []
+        for i in range(4):
+            yaw = [2 * np.pi * y / 64 for y in range(64)]
+            yaw = [[np.cos(y), np.sin(y)] for y in yaw]
+            yaw = torch.from_numpy(np.array(yaw).astype(np.float32)).to(self.device)
+            _img = self.decoder(yaw, bak[i:i+1].expand(64, -1, -1, -1))
+            vid.append(_img)
+        vid = torch.stack(vid)
+        return vid
 
 
 class Encoder(nn.Module):
