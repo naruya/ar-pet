@@ -1,5 +1,8 @@
 *.mp4
 *.MP4
+*.pkl
+*.gif
+*/back/*.png
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
