@@ -3,6 +3,7 @@
 *.pkl
 *.gif
 *.npy
+runs/
 */back/*.png
 
 # Byte-compiled / optimized / DLL files
