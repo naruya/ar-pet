@@ -1,6 +1,6 @@
 import cv2
 
-def vread(path, T=9999):
+def vread(path, T=9999, mute=True):
     vid = []
     cap = cv2.VideoCapture(path)
     i = 1
@@ -11,9 +11,9 @@ def vread(path, T=9999):
         if ret:
             vid.append(frame[:,:,::-1])
             i += 1
-            if i % 300 == 0:
+            if i % 300 == 0 and not mute:
                 print(i, end=" ")
         else:
             cap.release()
-    print()
+    if not mute: print()
     return vid

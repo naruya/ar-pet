@@ -89,15 +89,17 @@ def make_dataset(file, skip=None):
             back_t = cv2.resize(back_t, (64, 64))
             backs.append(back_t)
             auxs.append([t, x, y, w, h])
-    imgs_path = file.replace("split/", "dataset/img/").replace("mp4", "gif")
-    clip = mpy.ImageSequenceClip(imgs, fps=30*2)
-    clip.write_gif(imgs_path, fps=30*2)
-    backs_path = file.replace("split/", "dataset/back/").replace("mp4", "gif")
-    clip = mpy.ImageSequenceClip(backs, fps=30*2)
-    clip.write_gif(backs_path, fps=30*2)
-    pickle_path = file.replace("split/", "dataset/aux/").replace("mp4", "pkl")
-    with open(pickle_path, mode='wb') as f:
-        pickle.dump(auxs, f)
+
+    if len(imgs) > 0:
+        imgs_path = file.replace("split/", "dataset/img/").replace("mp4", "gif")
+        clip = mpy.ImageSequenceClip(imgs, fps=30*2)
+        clip.write_gif(imgs_path, fps=30*2)
+        backs_path = file.replace("split/", "dataset/back/").replace("mp4", "gif")
+        clip = mpy.ImageSequenceClip(backs, fps=30*2)
+        clip.write_gif(backs_path, fps=30*2)
+        pickle_path = file.replace("split/", "dataset/aux/").replace("mp4", "pkl")
+        with open(pickle_path, mode='wb') as f:
+            pickle.dump(auxs, f)
 
 
 if __name__ == "__main__":

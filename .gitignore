@@ -2,6 +2,7 @@
 *.MP4
 *.pkl
 *.gif
+*.npy
 */back/*.png
 
 # Byte-compiled / optimized / DLL files
