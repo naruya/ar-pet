@@ -15,14 +15,24 @@ class AE(nn.Module):
         init_weights(self)
         self.optimizer = optim.Adam(self.parameters())
 
-    def forward(self, feed_dict, return_img=False):
+    def forward(self, feed_dict, return_img=False, return_img_f=False):
         img, bak = feed_dict["img"].to(self.device), feed_dict["bak"].to(self.device)
         yaw = self.encoder(img)
         _img = self.decoder(yaw, bak)
         if return_img:
             return _img
         loss = torch.sum((_img - img)**2) / len(img)
-        return loss
+        
+        flip = torch.from_numpy(np.array([-1, 1])).to(self.device)
+        yaw_f = yaw * flip
+        img_f = img[:,:,:,torch.arange(63,-1,-1)]
+        bak_f = bak[:,:,:,torch.arange(63,-1,-1)]
+        _img_f = self.decoder(yaw_f, bak)
+        if return_img_f:
+            return _img_f
+        loss_f = torch.sum((_img_f - img_f)**2) / len(img_f)
+        
+        return loss + loss_f
     
     def train_(self, feed_dict):
         self.train()
@@ -41,6 +51,10 @@ class AE(nn.Module):
     def reconst(self, feed_dict):
         _img = self.forward(feed_dict, return_img=True)
         return _img
+    
+    def reconst_f(self, feed_dict):
+        _img_f = self.forward(feed_dict, return_img_f=True)
+        return _img_f
     
     def sample_img(self, feed_dict):
         bak = feed_dict["bak"].to(self.device)
