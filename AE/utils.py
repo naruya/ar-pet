@@ -11,6 +11,7 @@ def save_model(model, name):
     for i, dist in enumerate(model.distributions):
         torch.save(dist.state_dict(), os.path.join(path, "dist" + str(i) + ".pt"))
     torch.save(model.optimizer.state_dict(), os.path.join(path, "opt.pt"))
+    return time
 
 
 def load_model(model, name, time):
